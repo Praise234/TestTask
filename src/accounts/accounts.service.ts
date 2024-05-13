@@ -17,7 +17,7 @@ export class AccountsService {
     try { 
       const firebaseApp = this.firebaseService.getAdmin();
       const decodedToken = await firebaseApp.auth().verifyIdToken(token, true);
-      return { uid: decodedToken.uid, email: decodedToken.email };
+      return { uid: decodedToken.uid, email: decodedToken.email, token };
     } catch (error) {
       console.log(error)
       throw new Error('Invalid token');
@@ -182,7 +182,7 @@ export class AccountsService {
     
         return {
           statusCode: 202,
-          userCredentials: { ...userData, uid, refreshToken, token, expirationTime },
+          userCredentials: { ...user, uid, refreshToken, token, expirationTime },
           message: "Login successful"
         }
 
@@ -207,6 +207,23 @@ export class AccountsService {
 
 
     
+  }
+
+
+
+  async logout(userData: any) {
+
+    try {
+
+
+      await admin.auth().revokeRefreshTokens(userData.uid);
+
+      return {statusCode: 200, messages: "LogOut Successfull"}
+      
+    } catch (error) {
+      console.log(error)
+      throw new BadRequestException('Something went wrong');
+    }
   }
 
   // async findAll() {

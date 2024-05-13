@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Res, UseGuards } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { Prisma } from '@prisma/client';
 import { LoginAccountDto } from './dto/login-account.dto';
 import { Response } from 'express';
+import { GetUser } from 'src/decorators/user.decorator';
+import { GetToken } from 'src/decorators/get-token.decorator';
+import { FirebaseAuthGuard } from './firebase-auth.guard';
 
 
 @Controller('v1/accounts')
@@ -22,6 +25,19 @@ export class AccountsController {
    
 
     return userData;
+  }
+
+  @UseGuards(FirebaseAuthGuard)
+  @Post('logout')
+  logout(@GetUser() userData: any) {
+
+    if (!userData) {
+      return { message: 'No token provided' };
+  }
+  
+    
+    return this.accountsService.logout(userData);
+
   }
 
   // @Get()
