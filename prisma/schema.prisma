@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+}
+
+
+model Accounts {
+  id            Int           @id @default(autoincrement()) @unique
+  username      String        
+  email         String        @unique
+  password      String        
+  accountType   AccountType
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+}
+
+model CompanyDetails {
+  id                    Int           @id @default(autoincrement()) @unique
+  companyName           String        @unique
+  numberOfUsers         Int           
+  numberOfProducts      Int
+  percentage            Float
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+}
+
+model Images {
+  id            Int           @id @default(autoincrement()) @unique
+  url           String        
+  mimeType      String        
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+}
+
+model Notifications {
+  id                    Int                 @id @default(autoincrement()) @unique
+  activityId            Int                 
+  notificationType      NotificationType 
+  recepientId           Int   
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+}
+
+
+enum AccountType {
+  A
+  B
+}
+
+enum NotificationType {
+  NEWIMAGE
+  NEWCOMPANY
+}
