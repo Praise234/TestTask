@@ -1,21 +1,24 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
 import { ImagesService } from './images.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FirebaseAuthGuard } from 'src/accounts/firebase-auth.guard';
-import { GetUser } from 'src/decorators/user.decorator';
+import { FirebaseAuthGuard } from '../Guards/firebase-auth.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { RolesGuard } from 'src/Guards/roles.guard';
 
 
-@Controller('v1/images')
+@Controller({path: 'images', version: '1'})
 @UseGuards(FirebaseAuthGuard)
+@UseGuards(RolesGuard)
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
   // upload an image
   @Post('upload')
+  @Roles(['B'])
   @UseInterceptors(FileInterceptor('imgFile'))
-  create(@UploadedFile() imgFile: Express.Multer.File, @GetUser() userData: any) {
+  create(@UploadedFile() imgFile: Express.Multer.File) {
     console.log(imgFile); 
-    return this.imagesService.create(imgFile, userData);
+    return this.imagesService.create(imgFile);
   }
 
   // get all images

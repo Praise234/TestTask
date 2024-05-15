@@ -1,7 +1,7 @@
 // src/auth/jwt-auth.guard.ts
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { AccountsService } from './accounts.service';
+import { AccountsService } from '../accounts/accounts.service';
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {

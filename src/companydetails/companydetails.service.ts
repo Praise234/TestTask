@@ -6,15 +6,9 @@ import { DatabaseService } from 'src/database/database.service';
 @Injectable()
 export class CompanydetailsService {
   constructor(private readonly databaseService: DatabaseService) {}
-  async create(createCompanydetailDto: Prisma.CompanyDetailsCreateInput, userData:any) {
+  async create(createCompanydetailDto: Prisma.CompanyDetailsCreateInput) {
 
-    const {accountType} = await this.databaseService.accounts.findFirst({
-      where: {email: userData.email}
-    })
-
-    if(accountType === "B") {
-      throw new UnauthorizedException('You are not authorized to perform this operation');
-    }
+  
 
     const companyName = createCompanydetailDto.companyName;
     const numOfUsers = createCompanydetailDto.numberOfUsers;

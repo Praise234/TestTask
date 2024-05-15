@@ -1,18 +1,22 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { CompanydetailsService } from './companydetails.service';
 import { Prisma } from '@prisma/client';
-import { FirebaseAuthGuard } from 'src/accounts/firebase-auth.guard';
-import { GetUser } from 'src/decorators/user.decorator';
+import { FirebaseAuthGuard } from '../Guards/firebase-auth.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { RolesGuard } from 'src/Guards/roles.guard';
+import path from 'path';
 
-@Controller('v1/companydetails')
+@Controller({path: 'companydetails', version: '1'})
 @UseGuards(FirebaseAuthGuard)
+@UseGuards(RolesGuard)
 export class CompanydetailsController {
   constructor(private readonly companydetailsService: CompanydetailsService) {}
 
   // create new company
   @Post()
-  create(@Body() createCompanydetailDto: Prisma.CompanyDetailsCreateInput, @GetUser() userData: any ) {
-    return this.companydetailsService.create(createCompanydetailDto, userData);
+  @Roles(['A'])
+  create(@Body() createCompanydetailDto: Prisma.CompanyDetailsCreateInput ) {
+    return this.companydetailsService.create(createCompanydetailDto);
   }
 
   // find all company

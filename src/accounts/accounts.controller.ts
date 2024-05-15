@@ -2,13 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Res, U
 import { AccountsService } from './accounts.service';
 import { Prisma } from '@prisma/client';
 import { LoginAccountDto } from './dto/login-account.dto';
-import { Response } from 'express';
 import { GetUser } from 'src/decorators/user.decorator';
-import { GetToken } from 'src/decorators/get-token.decorator';
-import { FirebaseAuthGuard } from './firebase-auth.guard';
+import { FirebaseAuthGuard } from '../Guards/firebase-auth.guard';
 
 
-@Controller('v1/accounts')
+@Controller({path: 'accounts', version: '1'})
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
 

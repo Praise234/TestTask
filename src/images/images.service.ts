@@ -4,15 +4,8 @@ import { DatabaseService } from 'src/database/database.service';
 @Injectable()
 export class ImagesService {
   constructor(private readonly databaseService: DatabaseService) {}
-  async create(imgFile: Express.Multer.File, userData:any) {
+  async create(imgFile: Express.Multer.File) {
 
-    const {accountType} = await this.databaseService.accounts.findFirst({
-      where: {email: userData.email}
-    })
-
-    if(accountType === "A") {
-      throw new UnauthorizedException('You are not authorized to perform this operation');
-    }
 
     
      // Validate that the file is an image

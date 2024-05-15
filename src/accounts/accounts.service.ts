@@ -230,9 +230,13 @@ export class AccountsService {
   //   return `This action returns all accounts`;
   // }
 
-  // async findOne(id: number) {
-  //   return `This action returns a #${id} account`;
-  // }
+  async findOne(email: string) {
+    return await this.databaseService.accounts.findFirst({ // find user data by email
+      where: {
+        email
+      }
+    });
+  }
 
   // async update(id: number, updateAccountDto: Prisma.AccountsUpdateInput) {
   //   // return `This action updates a #${id} account`;
